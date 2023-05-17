@@ -1,0 +1,21 @@
+{
+    "items":[
+        {
+            "tagId":"0048431379",
+            "itemName":"Notebook"
+        },
+        {
+            "tagId":"0106365196",
+            "itemName":"Napolean"
+        }
+    ],
+    "associations":[
+        {
+            "associationName":"Books",
+            "requiredItemTags":[
+                "0048431379",
+                "0106365196"
+            ]
+        }
+    ]
+}
