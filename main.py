@@ -3,18 +3,13 @@ from association_manager import checkAssociations
 from serial_connector import scan_RFID_tags
 import os
 import sys
+from pi_main_event_loop import main_event_loop
 
 def main():
     serial_connection = serial.Serial(os.environ.get("SERIAL_PORT_PATH"), 9600, timeout=0.01)
     if os.environ.get("ENV") == "pi":
         print("Running pi")
-        tags = scan_RFID_tags(serial_connection, 5)
-        print(tags)
-        all_associations_correct = checkAssociations(tags)
-        if all_associations_correct:
-            print("success")
-        else:
-            print("error")
+        main_event_loop(serial_connection)
 
     if os.environ.get("ENV") == "macintosh":
         success_audio = AudioSegment.from_file("./sound/ringtone-1-46486.mp3")

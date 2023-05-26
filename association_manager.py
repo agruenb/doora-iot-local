@@ -19,3 +19,9 @@ def getItemName(tagId):
         for item in associations["items"]:
             if item["tagId"] == tagId:
                 return item["itemName"]
+            
+def checkAlwaysRequired(tags):
+    with open('associations.json') as raw_associations:
+        associations = json.load(raw_associations)
+        complete = set(associations["alwaysRequired"]) == set(tags).intersection(associations["alwaysRequired"])
+        return complete
