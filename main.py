@@ -1,15 +1,19 @@
-import serial
 from association_manager import checkAssociations
 from serial_connector import scan_RFID_tags
 import os
 import sys
 from pi_main_event_loop import main_event_loop
+import pygame
 
 def main():
-    serial_connection = serial.Serial(os.environ.get("SERIAL_PORT_PATH"), 9600, timeout=0.01)
+    pygame.mixer.init()
+    pygame.mixer.music.load("./sound/retro_game.mp3")
+    pygame.mixer.music.play()
+    while pygame.mixer.music.get_busy() == True:
+        continue
     if os.environ.get("ENV") == "pi":
         print("Running pi")
-        main_event_loop(serial_connection)
+        main_event_loop()
 
     if os.environ.get("ENV") == "macintosh":
         success_audio = AudioSegment.from_file("./sound/ringtone-1-46486.mp3")

@@ -1,4 +1,3 @@
 # Doora On Device Software
 
-requires a local installation of ffmpeg
-`brew install ffmpeg`
+Sometimes the connection between the rfid scanner and the pi breaks. Unplugging and plugging the usb connection helps most of the time.

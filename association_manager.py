@@ -1,4 +1,5 @@
 import json
+import time
 
 def checkAssociations(tags):
     with open('associations.json') as raw_associations:
@@ -25,3 +26,10 @@ def checkAlwaysRequired(tags):
         associations = json.load(raw_associations)
         complete = set(associations["alwaysRequired"]) == set(tags).intersection(associations["alwaysRequired"])
         return complete
+    
+def extractInTimeTags(tags_list, timeout):
+    in_time_tags = []
+    for tag, value in tags_list.items():
+        if value.get("lastSeen") > time.time() - timeout:
+            in_time_tags.append(tag)
+    return in_time_tags
