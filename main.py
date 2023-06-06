@@ -1,38 +1,19 @@
-from association_manager import checkAssociations
-from serial_connector import scan_RFID_tags
 import os
 import sys
-from pi_main_event_loop import main_event_loop
-import pygame
 
 def main():
-    pygame.mixer.init()
-    pygame.mixer.music.load("./sound/retro_game.mp3")
-    pygame.mixer.music.play()
-    while pygame.mixer.music.get_busy() == True:
-        continue
+
     if os.environ.get("ENV") == "pi":
-        print("Running pi")
-        main_event_loop()
+        #add directories
+        sys.path.append(os.environ.get("DOORA_PATH") + '/raspberry')
+        
+        from loop import loop
+        print("Starting Doora - Config for Raspberry Pi")
+        loop()
 
     if os.environ.get("ENV") == "macintosh":
-        success_audio = AudioSegment.from_file("./sound/ringtone-1-46486.mp3")
-        error_audio = AudioSegment.from_file("./sound/melancholy-ui-chime.mp3")
-        def on_init_scan(event):
-            if event.scan_code == 12: #key "q"
-                audio = AudioSegment.from_file("./sound/ringtone-1-46486.mp3")
-                play(audio)
-                print("\r\nq pressed, scanning...")
-                tags = scan_RFID_tags(serial_connection, 5)
-                print(tags)
-                all_associations_correct = checkAssociations(tags)
-                if all_associations_correct:
-                    play(success_audio)
-                else:
-                    play(error_audio)
-        
-        keyboard.on_release(on_init_scan)
-        keyboard.wait()
+        """ keyboard.on_release()
+        keyboard.wait() """
 
 if __name__ == "__main__":
     # Set environment variables depending on target platform
@@ -46,14 +27,12 @@ if __name__ == "__main__":
         env_file_path = ".env.raspberry_pi.txt"
     if args[0] == "--mac":
         env_file_path = ".env.macintosh.txt"
-        from pydub import AudioSegment
-        from pydub.playback import play
         import keyboard
 
     with open(env_file_path, 'r') as file:
         lines = file.readlines()
         for line in lines:
-            line = line.strip()  # Remove leading/trailing whitespace
+            line = line.strip()
             if line:
                 var_name, var_value = line.split('=')
                 os.environ[var_name] = var_value
