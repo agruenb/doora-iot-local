@@ -18,8 +18,9 @@ def loop():
     print("Initial Door state: {}".format("Open" if (GPIO.input(DOOR_GPIO) == 0) else "Closed"))
     door_open_prev_loop = False
     while True:
+        sleep(0.1)
         i += 1
-        if i%10000 == 0:
+        if i%100 == 0:
             print("loop " + str(i))
         scan_RFID_tags(serial_connection, tag_list)
         door_open = (GPIO.input(DOOR_GPIO) == 0)
