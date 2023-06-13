@@ -15,7 +15,7 @@ def scan_RFID_tags(serial_connection, tag_dict):
     while(read_rows < max_rows and serial_connection.in_waiting):
         read_rows += 1
         raw_line = serial_connection.readline()
-        tag = raw_line.lstrip(b"\x02").rstrip(b"\r\n").decode('ascii')
+        tag = raw_line.lstrip(b"\x02").lstrip(b"\x03").lstrip(b"\x02").rstrip(b"\r\n").decode('ascii')
         if tag == "":
             continue
         #remove line from queue

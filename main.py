@@ -10,16 +10,13 @@ def main():
         from loop import loop
         print("Starting Doora - Config for Raspberry Pi")
         loop()
-
-    if os.environ.get("ENV") == "macintosh":
-        """ keyboard.on_release()
-        keyboard.wait() """
+        
 
 if __name__ == "__main__":
     # Set environment variables depending on target platform
     args = sys.argv[1:]
     if not len(args) >= 1:
-        print("Insufficient arguments provided. Please specify the environment with --mac or --pi.")
+        print("Insufficient arguments provided. Please specify the environment with --pi.")
         sys.exit(1)
 
     env_file_path = ""
