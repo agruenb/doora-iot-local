@@ -14,13 +14,13 @@ def loop():
     DOOR_GPIO = 23
     GPIO.setup(DOOR_GPIO, GPIO.IN)
     tag_list = {}
-    serial_connection = serial.Serial(os.environ.get("SERIAL_PORT_PATH"), 9600, timeout=0.2)
+    serial_connection = serial.Serial(os.environ.get("SERIAL_PORT_PATH"), 9600, timeout=0.1)
     i = 0
     print("Initial Door state: {}".format("Open" if (GPIO.input(DOOR_GPIO) == 0) else "Closed"))
     door_open_prev_loop = False
     while True:
         i += 1
-        if i%32000 == 0:
+        if i%32 == 0:
             print("loop " + str(i))
             getKnownTags()
             getAssociations()

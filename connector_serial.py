@@ -8,23 +8,25 @@ def available_ports():
     ports = serial.tools.list_ports.comports()
     for port, desc, hwid in sorted(ports):
         print(f"{port}: {desc} [{hwid}]")
-    
+
 def scan_RFID_tags(serial_connection, tag_dict):
-    max_rows = 10
-    read_rows = 0
-    while(read_rows < max_rows and serial_connection.in_waiting):
-        read_rows += 1
-        raw_line = serial_connection.readline()
-        tag = raw_line.lstrip(b"\x02").lstrip(b"\x03").lstrip(b"\x02").rstrip(b"\r\n").decode('ascii')
-        if tag == "":
+    start_time = time.time()
+    serial_buffer_contents = serial_connection.read(4096)
+    codes = serial_buffer_contents.decode('ascii').split("\r\n")
+    for code in codes:
+        if code == "":
             continue
-        #remove line from queue
-        serial_connection.read(len(raw_line))
-        print("Found " + tag)
-        if tag != b"\x03" and tag != b"":
-            tag_dict[tag] = {
-                "lastSeen":time.time()
-            }
+        code = code.lstrip("\x02").lstrip("\x03").lstrip("\x02")
+        if code == "":
+            continue
+        print("Found " + code)
+        tag_dict[code] = {
+            "lastSeen":time.time()
+        }
+
+    end_time = time.time()
+    if end_time - start_time > 0.5:
+        print(f"Scan duration: {end_time - start_time}")
 
 
 
