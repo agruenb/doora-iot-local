@@ -1,13 +1,7 @@
 import json
 import time
 
-def getItemName(tagId):
-    with open('associations.json') as raw_associations:
-        associations = json.load(raw_associations)
-        for item in associations["items"]:
-            if item["tagId"] == tagId:
-                return item["itemName"]
-    
+#return all tags that were scanned in less time ago then timeout
 def extractInTimeTags(tags_list, timeout):
     in_time_tags = []
     for tag, value in tags_list.items():
@@ -15,6 +9,17 @@ def extractInTimeTags(tags_list, timeout):
             in_time_tags.append(tag)
     return in_time_tags
 
+#get an item from the items file
+def getItem(tagId):
+    with open('remote_all_items.json') as raw_items:
+        items = json.load(raw_items)
+        item = list(filter(lambda item:item["tagID"] == tagId, items))
+        if len(item) != 0:
+            return item[0]
+        else:
+            return None
+
+#check if all associations hold true with the input tags
 def checkAssociations(tags = []):
     with open('remote_associations.json') as raw_associations:
         assoc = json.load(raw_associations)

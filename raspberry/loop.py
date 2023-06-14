@@ -8,7 +8,9 @@ from connector_serial import scan_RFID_tags
 import pygame
 import time
 
+# main loop on raspberry pi
 def loop():
+    #setup
     pygame.mixer.init()
     GPIO.setmode(GPIO.BCM)
     DOOR_GPIO = 23
@@ -16,14 +18,18 @@ def loop():
     tag_list = {}
     serial_connection = serial.Serial(os.environ.get("SERIAL_PORT_PATH"), 9600, timeout=0.1)
     i = 0
-    print("Initial Door state: {}".format("Open" if (GPIO.input(DOOR_GPIO) == 0) else "Closed"))
     door_open_prev_loop = False
+    print("Initial Door state: {}".format("Open" if (GPIO.input(DOOR_GPIO) == 0) else "Closed"))
+    
+    #program loop
     while True:
         i += 1
+        #Every 32 loops pull the tag info from the backend
         if i%32 == 0:
             print("loop " + str(i))
             getKnownTags()
             getAssociations()
+        #check the RFID tags from the last 2 seconds on door open
         scan_RFID_tags(serial_connection, tag_list)
         door_open = (GPIO.input(DOOR_GPIO) == 0)
         if door_open and not door_open_prev_loop:
@@ -40,5 +46,6 @@ def loop():
                     continue
                 print("Associations not fullfilled")
             door_open_prev_loop = True
+        #reset door state
         if not door_open:
             door_open_prev_loop = False
