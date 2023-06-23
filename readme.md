@@ -1,6 +1,6 @@
 # Doora On Device Software
 
-Sometimes the connection between the rfid scanner and the pi breaks. Unplugging and plugging the usb connection helps most of the time.
+This is the repository for the python code that runs on the raspberry pi.
 
 ## Important notes for development
 
